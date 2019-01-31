@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.kuyun</groupId>
@@ -15,38 +16,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>jstl</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.4</version>
     </dependency>
-    <dependency>
-      <groupId>org.nutz</groupId>
-      <artifactId>nutz</artifactId>
-      <version>1.b.52</version>
-    </dependency>
-    <dependency>
-      <groupId>org.freemarker</groupId>
-      <artifactId>freemarker</artifactId>
-      <version>2.3.20</version>
-    </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -69,71 +42,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>druid</artifactId>
-      <version>1.0.6</version>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.30</version>
-    </dependency>
-    <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-      <version>2.6.0</version>
-    </dependency>
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>1.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>1.4.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz</artifactId>
-      <version>2.2.1</version>
-    </dependency>
-    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>18.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.poi</groupId>
-      <artifactId>poi-ooxml</artifactId>
-      <version>3.5-FINAL</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.json-lib</groupId>
-      <artifactId>json-lib</artifactId>
-      <version>2.2.2</version>
-      <classifier>jdk15</classifier>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>2.9.3</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.jxls</groupId>
-      <artifactId>jxls-core</artifactId>
-      <version>1.0.6</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.jxls</groupId>
-      <artifactId>jxls-reader</artifactId>
-      <version>1.0.6</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -141,79 +52,15 @@
       <version>2.4</version>
     </dependency>
   </dependencies>
-  <profiles>
-    <profile>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <id>dev</id>
-      <properties>
-        <deploy.type>dev</deploy.type>
-      </properties>
-    </profile>
-    <profile>
-      <id>beta</id>
-      <properties>
-        <deploy.type>beta</deploy.type>
-      </properties>
-    </profile>
-    <profile>
-      <id>prod</id>
-      <properties>
-        <deploy.type>prod</deploy.type>
-      </properties>
-    </profile>
-  </profiles>
-
 
 
   <build>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-      <resource>
-        <directory>src/main/resources.${deploy.type}</directory>
-      </resource>
-    </resources>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
-              <overWriteReleases>false</overWriteReleases>
-              <overWriteSnapshots>false</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>theMainClass</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <target>1.6</target>
-          <source>1.6</source>
+          <target>1.8</target>
+          <source>1.8</source>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>

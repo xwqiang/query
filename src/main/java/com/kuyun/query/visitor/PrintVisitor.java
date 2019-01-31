@@ -1,5 +1,6 @@
 package com.kuyun.query.visitor;
 
+import com.google.gson.Gson;
 import com.kuyun.query.condition.And;
 import com.kuyun.query.condition.Not;
 import com.kuyun.query.condition.Or;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public class PrintVisitor extends Visitor<Object> {
 
-//    Map<String, Object> map = new HashMap();
+    private static Gson gson = new Gson();
 
     @Override
     public Object visit(And and) {
@@ -48,6 +49,6 @@ public class PrintVisitor extends Visitor<Object> {
 
     @Override
     public Object visit(Value value) {
-        return value.getValue();
+        return gson.toJson(value.getValue());
     }
 }

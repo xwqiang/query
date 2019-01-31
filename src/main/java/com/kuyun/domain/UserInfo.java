@@ -1,11 +1,12 @@
-package com.kuyun;
+package com.kuyun.domain;
 
 /**
  * Created by xuwuqiang on 2019/1/29.
  */
 public class UserInfo {
-    private Long id = 12L ;
-    private String name="zhouzhou";
+
+    private Long id = 12L;
+    private String name = "testName";
 
     public Long getId() {
         return id;

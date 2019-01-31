@@ -1,4 +1,4 @@
-package com.kuyun.query;
+package com.kuyun.query.parsor;
 
 import com.google.gson.Gson;
 import com.kuyun.query.condition.And;
@@ -6,46 +6,35 @@ import com.kuyun.query.condition.Not;
 import com.kuyun.query.condition.Or;
 import com.kuyun.query.condition.Query;
 import com.kuyun.query.condition.Value;
-import com.kuyun.query.visitor.PrintVisitor;
 import java.util.List;
 import java.util.Map;
-import org.nutz.json.Json;
 
 /**
  * Created by xuwuqiang on 2017/3/1.
  */
 public class ParseClient {
 
+    static JsonParser jsonParser = new JsonParser();
 
-    public static void main(String[] args) {
-        String query = "{\"and\":[{\"not\":\"lalala\"},{\"or\":[\"hahaha\",\"123\"]}]}";
+    public <T> Query parse(String query, Class<T> clz) {
         Map<String, Object> json = new Gson().fromJson(query, Map.class);
-        Query[] queryWrapper = new Query[1];//通过数组，避免实例话，同时方便按引用传值
-        build(json, queryWrapper);
-        Query q = queryWrapper[0];
-        Object o = q.accept(new PrintVisitor());
-        System.out.println(Json.toJson(o));
+        Query[] queryWrapper = new Query[1];
+        build(json, queryWrapper, clz);
+        return queryWrapper[0];
     }
 
-    /**
-     * todo 格式转化
-     * @param json
-     * @param queryWrapper
-     * @return
-     */
-    private static Object build(Map json, Query[] queryWrapper) {
+    private <T> Object build(Map json, Query[] queryWrapper, Class<T> clz) {
 
         if (json.containsKey(Query.KEY_AND)) {
             Object obj = json.get(Query.KEY_AND);
             List list = (List) obj;
-
             queryWrapper[0] = new And.Builder().build();
             for (int i = 0; i < list.size(); i++) {
                 Query[] condMore = new Query[1];
-                if (!(list.get(i) instanceof Map)) {
-                    condMore[0] = new Value(list.get(1).toString());
+                if (isValue(list.get(i))) {
+                    condMore[0] = new Value(jsonParser.parse(list.get(1).toString(), clz));
                 } else {
-                    build((Map) list.get(i), condMore);
+                    build((Map) list.get(i), condMore, clz);
                 }
                 ((And) queryWrapper[0]).more(condMore);
             }
@@ -54,33 +43,40 @@ public class ParseClient {
         if (json.containsKey(Query.KEY_OR)) {
             Object obj = json.get(Query.KEY_OR);
             List list = (List) obj;
-
             queryWrapper[0] = new Or.Builder().build();
-
             for (int i = 0; i < list.size(); i++) {
                 Query[] condMore = new Query[1];
-
-                if (!(list.get(i) instanceof Map)) {
-                    condMore[0] = new Value(list.get(1).toString());
+                if (isValue(list.get(i))) {
+                    condMore[0] = new Value(jsonParser.parse(list.get(1).toString(), clz));
                 } else {
-                    build((Map) list.get(i), condMore);
+                    build((Map) list.get(i), condMore, clz);
                 }
                 ((Or) queryWrapper[0]).more(condMore);
             }
         }
         if (json.containsKey(Query.KEY_NOT)) {
+            queryWrapper[0] = new Not.Builder().build();
             Object obj = json.get(Query.KEY_NOT);
             Query[] cond = new Query[1];
-            if (!(obj instanceof Map)) {
-                queryWrapper[0] = new Not(new Value(obj.toString()));
-                return queryWrapper[0];
+            if (isValue(obj)) {
+                cond[0] = new Value(jsonParser.parse(obj.toString(), clz));
+            } else {
+                build((Map) obj, cond, clz);
             }
-
-            build((Map) obj, cond);
-            queryWrapper[0] = cond[0];
-
+            ((Not) queryWrapper[0]).not(cond[0]);
         }
+
         return queryWrapper[0];
+
+    }
+
+    private boolean isValue(Object obj) {
+        return !isQuery(obj);
+    }
+
+    private boolean isQuery(Object obj) {
+        return (obj instanceof Map && ((Map) obj).keySet().size() == 1 && (((Map) obj).containsKey(Query.KEY_AND)
+            || ((Map) obj).containsKey(Query.KEY_NOT) || ((Map) obj).containsKey(Query.KEY_OR)));
     }
 
 }
