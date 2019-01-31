@@ -25,3 +25,19 @@ Object json = q.accept(new PrintVisitor());
 
 System.out.println(json);
 ```
+
+3. 布尔值判断
+
+```
+Query not = new Not.Builder("true").build();
+
+Query or = new Or.Builder("true","false").build();
+
+Query and = new And(not, or);
+
+Visitor<Boolean> v = new BooleanVisitor();
+
+boolean value = and.accept(v);
+
+System.out.println(value);
+```

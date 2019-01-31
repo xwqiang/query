@@ -36,6 +36,10 @@ public class Not extends Query {
             this.a = a;
         }
 
+        public Builder(String a) {
+            this.a = new Value(a);
+        }
+
         public Builder not(Query a) {
             this.a = a;
             return this;
