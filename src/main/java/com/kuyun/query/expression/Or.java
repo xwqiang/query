@@ -40,7 +40,22 @@ public class Or extends BinaryQuery {
             this.c = c;
         }
 
-        public Builder more(Query... c) {
+        public Builder(String a, String b) {
+            this.a = new Value(a);
+            this.b = new Value(b);
+        }
+
+        public Builder(String a, String b, String... c) {
+            this.a = new Value(a);
+            this.b = new Value(b);
+            if (c != null && c.length > 0) {
+                for (String s : c) {
+                    or(new Value(s));
+                }
+            }
+        }
+
+        public Builder or(Query... c) {
             this.c = BinaryQuery.merge(this.c, c);
             return this;
         }
