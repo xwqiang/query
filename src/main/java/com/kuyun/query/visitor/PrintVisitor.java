@@ -1,11 +1,11 @@
 package com.kuyun.query.visitor;
 
 import com.google.gson.Gson;
-import com.kuyun.query.condition.And;
-import com.kuyun.query.condition.Not;
-import com.kuyun.query.condition.Or;
-import com.kuyun.query.condition.Query;
-import com.kuyun.query.condition.Value;
+import com.kuyun.query.expression.And;
+import com.kuyun.query.expression.Not;
+import com.kuyun.query.expression.Or;
+import com.kuyun.query.expression.Query;
+import com.kuyun.query.expression.Value;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

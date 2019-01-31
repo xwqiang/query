@@ -1,11 +1,12 @@
 package com.kuyun.query.parsor;
 
 import com.google.gson.Gson;
-import com.kuyun.query.condition.And;
-import com.kuyun.query.condition.Not;
-import com.kuyun.query.condition.Or;
-import com.kuyun.query.condition.Query;
-import com.kuyun.query.condition.Value;
+import com.kuyun.query.expression.And;
+import com.kuyun.query.expression.Not;
+import com.kuyun.query.expression.Or;
+import com.kuyun.query.expression.Query;
+import com.kuyun.query.expression.Value;
+import com.kuyun.util.GsonUtil;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,6 @@ import java.util.Map;
  */
 public class ParseClient {
 
-    static JsonParser jsonParser = new JsonParser();
 
     public <T> Query parse(String query, Class<T> clz) {
         Map<String, Object> json = new Gson().fromJson(query, Map.class);
@@ -32,7 +32,7 @@ public class ParseClient {
             for (int i = 0; i < list.size(); i++) {
                 Query[] condMore = new Query[1];
                 if (isValue(list.get(i))) {
-                    condMore[0] = new Value(jsonParser.parse(list.get(1).toString(), clz));
+                    condMore[0] = new Value(GsonUtil.fromJson(list.get(1).toString(), clz));
                 } else {
                     build((Map) list.get(i), condMore, clz);
                 }
@@ -47,7 +47,7 @@ public class ParseClient {
             for (int i = 0; i < list.size(); i++) {
                 Query[] condMore = new Query[1];
                 if (isValue(list.get(i))) {
-                    condMore[0] = new Value(jsonParser.parse(list.get(1).toString(), clz));
+                    condMore[0] = new Value(GsonUtil.fromJson(list.get(1).toString(), clz));
                 } else {
                     build((Map) list.get(i), condMore, clz);
                 }
@@ -59,7 +59,7 @@ public class ParseClient {
             Object obj = json.get(Query.KEY_NOT);
             Query[] cond = new Query[1];
             if (isValue(obj)) {
-                cond[0] = new Value(jsonParser.parse(obj.toString(), clz));
+                cond[0] = new Value(GsonUtil.fromJson(obj.toString(), clz));
             } else {
                 build((Map) obj, cond, clz);
             }

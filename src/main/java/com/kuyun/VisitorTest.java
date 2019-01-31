@@ -1,13 +1,13 @@
-package com.kuyun.query;
+package com.kuyun;
 
 import com.kuyun.domain.UserInfo;
-import com.kuyun.query.condition.Not;
-import com.kuyun.query.condition.Query;
-import com.kuyun.query.condition.QueryFactory;
-import com.kuyun.query.condition.Value;
+import com.kuyun.query.expression.Not;
+import com.kuyun.query.expression.Query;
+import com.kuyun.query.expression.QueryFactory;
+import com.kuyun.query.expression.Value;
 import com.kuyun.query.visitor.PrintVisitor;
 import com.kuyun.query.visitor.Visitor;
-import org.nutz.json.Json;
+import com.kuyun.util.GsonUtil;
 
 /**
  * Created by xuwuqiang on 2019/1/29.
@@ -23,7 +23,7 @@ public class VisitorTest {
         Visitor<Object> v = new PrintVisitor();
 
         Object value = and.accept(v);
-        System.out.println(Json.toJson(value));
+        System.out.println(GsonUtil.toJson(value));
 
     }
 

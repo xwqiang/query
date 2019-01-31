@@ -1,10 +1,10 @@
 package com.kuyun.query.visitor;
 
-import com.kuyun.query.condition.And;
-import com.kuyun.query.condition.Not;
-import com.kuyun.query.condition.Or;
-import com.kuyun.query.condition.Query;
-import com.kuyun.query.condition.Value;
+import com.kuyun.query.expression.And;
+import com.kuyun.query.expression.Not;
+import com.kuyun.query.expression.Or;
+import com.kuyun.query.expression.Query;
+import com.kuyun.query.expression.Value;
 
 /**
  * Created by xuwuqiang on 2019/1/29.

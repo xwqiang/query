@@ -1,4 +1,4 @@
-package com.kuyun.query.condition;
+package com.kuyun.query.expression;
 
 import com.kuyun.query.visitor.Visitor;
 import java.lang.reflect.InvocationTargetException;

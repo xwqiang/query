@@ -1,10 +1,4 @@
-package com.kuyun.query.condition;
-
-import com.kuyun.query.condition.And;
-import com.kuyun.query.condition.Not;
-import com.kuyun.query.condition.Or;
-import com.kuyun.query.condition.Query;
-import com.kuyun.query.condition.Value;
+package com.kuyun.query.expression;
 
 /**
  * Created by xuwuqiang on 2019/1/29.

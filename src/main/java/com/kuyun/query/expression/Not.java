@@ -1,4 +1,4 @@
-package com.kuyun.query.condition;
+package com.kuyun.query.expression;
 
 
 /**
