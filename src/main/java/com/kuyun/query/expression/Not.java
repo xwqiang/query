@@ -13,6 +13,10 @@ public class Not extends Query {
         this.a = a;
     }
 
+    public Not(Object a) {
+        this.a = new Value(a);
+    }
+
     private Not(Builder builder) {
         this.a = builder.a;
     }

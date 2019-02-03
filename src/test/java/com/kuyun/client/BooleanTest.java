@@ -5,9 +5,7 @@ import com.kuyun.query.expression.And;
 import com.kuyun.query.expression.Not;
 import com.kuyun.query.expression.Or;
 import com.kuyun.query.expression.Query;
-import com.kuyun.query.visitor.BooleanVisitor;
 import com.kuyun.query.visitor.UserBooleanConvertor;
-import com.kuyun.query.visitor.Visitor;
 
 /**
  * Created by xuwuqiang on 2019/1/29.
@@ -16,17 +14,9 @@ public class BooleanTest {
 
     public static void main(String[] args) {
 
-        Visitor<Boolean> simpleVisitor = new BooleanVisitor();
+        System.out.println(simpleQuery().bool());
 
-        boolean simple = simpleQuery().accept(simpleVisitor);
-
-        System.out.println(simple);
-
-        Visitor<Boolean> complexVisitor = new BooleanVisitor(new UserBooleanConvertor());
-
-        boolean complex = complexQuery().accept(complexVisitor);
-
-        System.out.println(complex);
+        System.out.println(complexQuery().bool(new UserBooleanConvertor()));
 
     }
 

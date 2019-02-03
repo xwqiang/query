@@ -11,7 +11,7 @@ import com.kuyun.query.expression.Value;
  */
 public class BooleanVisitor extends Visitor<Boolean> {
 
-    IConvertor convertor;
+    private IConvertor convertor;
 
     public BooleanVisitor(IConvertor iConvertor) {
         this.convertor = iConvertor;
@@ -19,6 +19,10 @@ public class BooleanVisitor extends Visitor<Boolean> {
 
     public BooleanVisitor() {
         this.convertor = new DefaultBooleanConvertor();
+    }
+
+    public void setConvertor(IConvertor convertor) {
+        this.convertor = convertor;
     }
 
     @Override
