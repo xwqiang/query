@@ -5,8 +5,13 @@ package com.kuyun.domain;
  */
 public class UserInfo {
 
-    private Long id = 12L;
-    private String name = "testName";
+    private Long id;
+    private String name;
+
+    public UserInfo(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

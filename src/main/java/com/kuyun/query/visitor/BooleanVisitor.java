@@ -11,6 +11,16 @@ import com.kuyun.query.expression.Value;
  */
 public class BooleanVisitor extends Visitor<Boolean> {
 
+    IConvertor convertor;
+
+    public BooleanVisitor(IConvertor iConvertor) {
+        this.convertor = iConvertor;
+    }
+
+    public BooleanVisitor() {
+        this.convertor = new DefaultBooleanConvertor();
+    }
+
     @Override
     public Boolean visit(And and) {
         for (Query q : and.queries()) {
@@ -38,6 +48,6 @@ public class BooleanVisitor extends Visitor<Boolean> {
 
     @Override
     public Boolean visit(Value value) {
-        return value.getValue().equals("true");
+        return convertor.convert(value);
     }
 }

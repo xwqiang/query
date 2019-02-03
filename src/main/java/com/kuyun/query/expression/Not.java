@@ -40,6 +40,10 @@ public class Not extends Query {
             this.a = new Value(a);
         }
 
+        public Builder(Object a) {
+            this.a = new Value(a);
+        }
+
         public Builder not(Query a) {
             this.a = a;
             return this;

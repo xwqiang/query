@@ -1,5 +1,6 @@
 package com.kuyun.query.expression;
 
+import com.kuyun.query.visitor.PrintVisitor;
 import com.kuyun.query.visitor.Visitor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,10 +36,14 @@ public abstract class Query {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
-                //todo exception handler
                 e.printStackTrace();
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return this.accept(new PrintVisitor()).toString();
     }
 }

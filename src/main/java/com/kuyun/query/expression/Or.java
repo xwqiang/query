@@ -40,7 +40,7 @@ public class Or extends BinaryQuery {
             this.c = c;
         }
 
-        public Builder(String a, String b) {
+        public Builder(Object a, Object b) {
             this.a = new Value(a);
             this.b = new Value(b);
         }

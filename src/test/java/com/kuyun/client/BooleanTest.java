@@ -5,8 +5,8 @@ import com.kuyun.query.expression.And;
 import com.kuyun.query.expression.Not;
 import com.kuyun.query.expression.Or;
 import com.kuyun.query.expression.Query;
-import com.kuyun.query.expression.Value;
 import com.kuyun.query.visitor.BooleanVisitor;
+import com.kuyun.query.visitor.UserBooleanConvertor;
 import com.kuyun.query.visitor.Visitor;
 
 /**
@@ -16,18 +16,43 @@ public class BooleanTest {
 
     public static void main(String[] args) {
 
-        Query not = new Not.Builder("true").build();
+        Visitor<Boolean> simpleVisitor = new BooleanVisitor();
 
-        Query or = new Or.Builder("true","false").build();
+        boolean simple = simpleQuery().accept(simpleVisitor);
 
-        Query and = new And(not, or);
+        System.out.println(simple);
 
-        Visitor<Boolean> v = new BooleanVisitor();
+        Visitor<Boolean> complexVisitor = new BooleanVisitor(new UserBooleanConvertor());
 
-        boolean value = and.accept(v);
+        boolean complex = complexQuery().accept(complexVisitor);
 
-        System.out.println(value);
+        System.out.println(complex);
 
     }
 
+    public static Query simpleQuery() {
+
+        Query not = new Not.Builder("true").build();
+
+        Query or = new Or.Builder("true", "false").build();
+
+        Query and = new And(not, or);
+
+        return and;
+    }
+
+    public static Query complexQuery() {
+
+        UserInfo zhou = new UserInfo(1L, "zhou");
+
+        UserInfo bob = new UserInfo(12L, "bob");
+
+        Query not = new Not.Builder(zhou).build();
+
+        Query or = new Or.Builder(zhou, bob).build();
+
+        Query and = new And(not, or);
+
+        return and;
+    }
 }
