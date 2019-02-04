@@ -14,7 +14,7 @@ public class ParseTest {
 
         Query q = Query.fromJson(query, UserInfo.class);
 
-        System.out.println(q.toString());
+        System.out.println(q.toJson());
 
     }
 }

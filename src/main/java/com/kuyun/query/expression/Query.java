@@ -52,8 +52,7 @@ public abstract class Query {
         return null;
     }
 
-    @Override
-    public String toString() {
+    public String toJson() {
         return this.accept(new PrintVisitor()).toString();
     }
 

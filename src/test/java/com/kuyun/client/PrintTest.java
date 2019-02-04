@@ -19,6 +19,6 @@ public class PrintTest {
 
         Query and = new And(not, or);
 
-        System.out.println(new Not(and).toString());
+        System.out.println(new Not(and).toJson());
     }
 }
