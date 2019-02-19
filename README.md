@@ -13,7 +13,7 @@ System.out.println(new Not(and).toJson());
 2. json 转化为表达式
 
 ```
-        
+       `_``_` 
 String query = "{\"and\":[{\"not\":{\"id\":12,\"name\":\"test\"}},{\"or\":[{\"id\":12,\"name\":\"bob\"},{\"id\":12,\"name\":\"zhouzhou\"}]}]}";
 
 Query q = Query.fromJson(query, UserInfo.class);

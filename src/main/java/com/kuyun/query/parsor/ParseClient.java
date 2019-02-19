@@ -2,6 +2,7 @@ package com.kuyun.query.parsor;
 
 import com.google.gson.Gson;
 import com.kuyun.query.expression.And;
+import com.kuyun.query.expression.BinaryQuery;
 import com.kuyun.query.expression.Not;
 import com.kuyun.query.expression.Or;
 import com.kuyun.query.expression.Query;
@@ -18,56 +19,40 @@ public class ParseClient {
 
     public <T> Query parse(String query, Class<T> clz) {
         Map<String, Object> json = new Gson().fromJson(query, Map.class);
-        Query[] queryWrapper = new Query[1];
-        build(json, queryWrapper, clz);
-        return queryWrapper[0];
+        return build(json, clz);
     }
 
-    private <T> Object build(Map json, Query[] queryWrapper, Class<T> clz) {
+    private <T> Query build(Map json, Class<T> clz) {
+
+        if (isValue(json)) {
+            return new Value(json);
+        }
 
         if (json.containsKey(Query.KEY_AND)) {
             Object obj = json.get(Query.KEY_AND);
-            List list = (List) obj;
-            queryWrapper[0] = new And.Builder().build();
-            for (int i = 0; i < list.size(); i++) {
-                Query[] condMore = new Query[1];
-                if (isValue(list.get(i))) {
-                    condMore[0] = new Value(GsonUtil.fromJson(list.get(1).toString(), clz));
-                } else {
-                    build((Map) list.get(i), condMore, clz);
-                }
-                ((And) queryWrapper[0]).more(condMore);
-            }
+            And and = new And.Builder().build();
+            new MoreCondition((List) obj, clz).more(and);
+            return and;
         }
 
         if (json.containsKey(Query.KEY_OR)) {
             Object obj = json.get(Query.KEY_OR);
-            List list = (List) obj;
-            queryWrapper[0] = new Or.Builder().build();
-            for (int i = 0; i < list.size(); i++) {
-                Query[] condMore = new Query[1];
-                if (isValue(list.get(i))) {
-                    condMore[0] = new Value(GsonUtil.fromJson(list.get(1).toString(), clz));
-                } else {
-                    build((Map) list.get(i), condMore, clz);
-                }
-                ((Or) queryWrapper[0]).more(condMore);
-            }
+            Or or = new Or.Builder().build();
+            new MoreCondition((List) obj, clz).more(or);
+            return or;
         }
         if (json.containsKey(Query.KEY_NOT)) {
-            queryWrapper[0] = new Not.Builder().build();
             Object obj = json.get(Query.KEY_NOT);
-            Query[] cond = new Query[1];
+            Query cond;
             if (isValue(obj)) {
-                cond[0] = new Value(GsonUtil.fromJson(obj.toString(), clz));
+                cond = new Value(GsonUtil.fromJson(obj.toString(), clz));
             } else {
-                build((Map) obj, cond, clz);
+                cond = build((Map) obj, clz);
             }
-            ((Not) queryWrapper[0]).not(cond[0]);
+            return new Not(cond);
         }
 
-        return queryWrapper[0];
-
+        return null;
     }
 
     private boolean isValue(Object obj) {
@@ -77,6 +62,29 @@ public class ParseClient {
     private boolean isQuery(Object obj) {
         return (obj instanceof Map && ((Map) obj).keySet().size() == 1 && (((Map) obj).containsKey(Query.KEY_AND)
             || ((Map) obj).containsKey(Query.KEY_NOT) || ((Map) obj).containsKey(Query.KEY_OR)));
+    }
+
+    class MoreCondition {
+
+        Class clz;
+        private List list;
+
+        public MoreCondition(List list, Class clz) {
+            this.list = list;
+            this.clz = clz;
+        }
+
+        public void more(BinaryQuery query) {
+            for (int i = 0; i < list.size(); i++) {
+                Query condMore;
+                if (isValue(list.get(i))) {
+                    condMore = new Value(GsonUtil.fromJson(list.get(1).toString(), clz));
+                } else {
+                    condMore = build((Map) list.get(i), clz);
+                }
+                query.more(condMore);
+            }
+        }
     }
 
 }
