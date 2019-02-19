@@ -64,7 +64,7 @@ public class ParseClient {
             || ((Map) obj).containsKey(Query.KEY_NOT) || ((Map) obj).containsKey(Query.KEY_OR)));
     }
 
-    class MoreCondition {
+    private class MoreCondition {
 
         Class clz;
         private List list;
