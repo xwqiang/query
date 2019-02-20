@@ -31,16 +31,17 @@ public class ParseClient {
         if (json.containsKey(Query.KEY_AND)) {
             Object obj = json.get(Query.KEY_AND);
             And and = new And.Builder().build();
-            new MoreCondition((List) obj, clz).more(and);
+            new ConditionParsor((List) obj, clz).more(and);
             return and;
         }
 
         if (json.containsKey(Query.KEY_OR)) {
             Object obj = json.get(Query.KEY_OR);
             Or or = new Or.Builder().build();
-            new MoreCondition((List) obj, clz).more(or);
+            new ConditionParsor((List) obj, clz).more(or);
             return or;
         }
+
         if (json.containsKey(Query.KEY_NOT)) {
             Object obj = json.get(Query.KEY_NOT);
             Query cond;
@@ -64,12 +65,12 @@ public class ParseClient {
             || ((Map) obj).containsKey(Query.KEY_NOT) || ((Map) obj).containsKey(Query.KEY_OR)));
     }
 
-    private class MoreCondition {
+    private class ConditionParsor {
 
         Class clz;
         private List list;
 
-        public MoreCondition(List list, Class clz) {
+        public ConditionParsor(List list, Class clz) {
             this.list = list;
             this.clz = clz;
         }
@@ -82,8 +83,12 @@ public class ParseClient {
                 } else {
                     condMore = build((Map) list.get(i), clz);
                 }
-                query.more(condMore);
+                addMore(query, condMore);
             }
+        }
+
+        private void addMore(BinaryQuery query, Query more) {
+            query.more(more);
         }
     }
 
